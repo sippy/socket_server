@@ -243,8 +243,11 @@ lthread_rx(struct lthread_args *args)
     str call_id;
     struct b2bua_slot *bslot;
 
-    if (args->wildcard == 0)
+    if (args->wildcard == 0) {
         n = pthread_create(&tx_thread, NULL, (void *(*)(void *))&lthread_tx, args);
+        if (n != 0)
+            abort();
+    }
     for (;;) {
         wi = wi_malloc(WI_INPACKET);
         if (wi == NULL) {
